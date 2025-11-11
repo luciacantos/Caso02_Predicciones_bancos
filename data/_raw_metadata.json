@@ -1,0 +1,62 @@
+{
+  "bbva": {
+    "name": "BBVA.MC",
+    "start": "2000-01-03T00:00:00",
+    "end": "2025-10-30T00:00:00",
+    "rows": 6634,
+    "columns": [
+      "('Adj Close', 'BBVA.MC')",
+      "('Close', 'BBVA.MC')",
+      "('Dividends', 'BBVA.MC')",
+      "('High', 'BBVA.MC')",
+      "('Low', 'BBVA.MC')",
+      "('Open', 'BBVA.MC')",
+      "('Stock Splits', 'BBVA.MC')",
+      "('Volume', 'BBVA.MC')"
+    ],
+    "nulls": {
+      "('Adj Close', 'BBVA.MC')": 0,
+      "('Close', 'BBVA.MC')": 0,
+      "('Dividends', 'BBVA.MC')": 0,
+      "('High', 'BBVA.MC')": 0,
+      "('Low', 'BBVA.MC')": 0,
+      "('Open', 'BBVA.MC')": 0,
+      "('Stock Splits', 'BBVA.MC')": 0,
+      "('Volume', 'BBVA.MC')": 0
+    }
+  },
+  "santander": {
+    "name": "SAN.MC",
+    "start": "2000-01-03T00:00:00",
+    "end": "2025-10-30T00:00:00",
+    "rows": 6634,
+    "columns": [
+      "('Adj Close', 'SAN.MC')",
+      "('Close', 'SAN.MC')",
+      "('Dividends', 'SAN.MC')",
+      "('High', 'SAN.MC')",
+      "('Low', 'SAN.MC')",
+      "('Open', 'SAN.MC')",
+      "('Stock Splits', 'SAN.MC')",
+      "('Volume', 'SAN.MC')"
+    ],
+    "nulls": {
+      "('Adj Close', 'SAN.MC')": 0,
+      "('Close', 'SAN.MC')": 0,
+      "('Dividends', 'SAN.MC')": 0,
+      "('High', 'SAN.MC')": 0,
+      "('Low', 'SAN.MC')": 0,
+      "('Open', 'SAN.MC')": 0,
+      "('Stock Splits', 'SAN.MC')": 0,
+      "('Volume', 'SAN.MC')": 0
+    }
+  },
+  "download_params": {
+    "start_date": "2000-01-01",
+    "end_date": "2025-10-31",
+    "auto_adjust_bbva": false,
+    "actions_bbva": true,
+    "auto_adjust_san": "default(yfinance)",
+    "actions_san": "default(yfinance)"
+  }
+}

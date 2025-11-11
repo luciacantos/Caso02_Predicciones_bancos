@@ -1,0 +1,26 @@
+Set-Content -Path .gitignore -Value @"
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Datos y artefactos pesados
+data/processed/seq/
+data/**/*.npy
+data/**/*.pkl
+reports/models/
+*.h5
+*.hdf5
+*.ckpt
+*.pb
+
+# IDE / SO
+.vscode/
+.DS_Store
+*.log
+"@
