@@ -1,6 +1,13 @@
 [theme]
 base="dark"
-primaryColor="#CBA135"
-backgroundColor="#0B0E12"
-secondaryBackgroundColor="#11161C"
-textColor="#EDEDED"
+
+# 🎨 Colores principales
+primaryColor="#1E90FF"              # Azul vivo (para botones y acentos)
+secondaryBackgroundColor="#0D1B2A"  # Azul oscuro elegante (paneles y tarjetas)
+backgroundColor="#0A192F"           # Fondo principal (azul muy oscuro, no negro)
+textColor="#E6F1FF"                 # Blanco azulado, suave para buen contraste
+
+# 💥 Opcional: acento rojo para títulos y detalles (lo usaremos en CSS)
+[theme]
+base="dark"
+
