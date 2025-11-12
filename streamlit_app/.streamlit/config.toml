@@ -1,13 +1,12 @@
 [theme]
-base="dark"
+base = "dark"
 
-# 🎨 Colores principales
-primaryColor="#1E90FF"              # Azul vivo (para botones y acentos)
-secondaryBackgroundColor="#0D1B2A"  # Azul oscuro elegante (paneles y tarjetas)
-backgroundColor="#0A192F"           # Fondo principal (azul muy oscuro, no negro)
-textColor="#E6F1FF"                 # Blanco azulado, suave para buen contraste
+# 🎨 Paleta personalizada BBVA vs Santander
+primaryColor = "#1E90FF"              # Azul vivo (botones, acentos)
+backgroundColor = "#0A192F"           # Fondo principal (azul oscuro, no negro)
+secondaryBackgroundColor = "#0D1B2A"  # Paneles / tarjetas
+textColor = "#E6F1FF"                 # Blanco azulado, suave para buen contraste
 
-# 💥 Opcional: acento rojo para títulos y detalles (lo usaremos en CSS)
-[theme]
-base="dark"
-
+# ✨ Comentario extra:
+# - Usa primaryColor (azul) para todo lo interactivo.
+# - Añade rojo (#FF4C4C) en CSS o gráficos para resaltar predicciones o alertas.
