@@ -1,6 +1,6 @@
 import os
 import base64
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -39,6 +39,9 @@ RED = "#FF4C4C"
 TEXT = "#E6F1FF"
 GRID = "#17324D"
 PLOT_BG = "rgba(13,27,42,0.85)"
+
+# Ventana fija de predicción a mostrar (3 meses)
+PRED_WINDOW_DAYS = 90
 
 # =================== ESTILO EXTRA ===================
 st.markdown(f"""
@@ -96,6 +99,13 @@ def recomendacion_simple(delta7: float, mape: float) -> str:
         return f"Mantener (variación {delta7:.1f}%)."
     return f"Vender / reducir ({delta7:.1f}%, confianza {conf})."
 
+def filter_recent_days(df: pd.DataFrame, days: int) -> pd.DataFrame:
+    if df.empty or "date" not in df:
+        return df
+    last_date = pd.to_datetime(df["date"]).max()
+    cutoff = (pd.to_datetime(last_date) - timedelta(days=days)).date()
+    return df[df["date"] >= cutoff]
+
 # =================== CARGA DE DATOS (LOCAL) ===================
 def load_price_csv(path: str, ticker: str) -> pd.DataFrame:
     header_idx = 0
@@ -152,7 +162,7 @@ with c1:
 with c2:
     st.markdown(
         f"""
-        <h1 style='text-align:center;'>💹 Radar de Inversión — <span style="color:{BLUE}">BBVA</span> & <span style="color:{RED}">Santander</span></h1>
+        <h1 style='text-align:center;'> Radar de Inversión — <span style="color:{BLUE}">BBVA</span> & <span style="color:{RED}">Santander</span></h1>
         <p style='text-align:center; color:{TEXT};'>Histórico de 25 años y predicción con señales de inversión basadas en la confianza del modelo.</p>
         """, unsafe_allow_html=True
     )
@@ -209,7 +219,7 @@ if st.session_state.show_pred:
     if df_pred.empty:
         st.warning("Aún no hay predicciones en `data/app/predicciones.csv`.")
     else:
-        st.markdown("### 🔮 Predicción (test + forecast)")
+        st.markdown("### Predicción (test + forecast)")
         c1, c2 = st.columns(2)
         for tk, col in zip(["BBVA","SAN"], [c1,c2]):
             dtk = df_pred[df_pred["ticker"]==tk].sort_values("date")
@@ -226,19 +236,23 @@ if st.session_state.show_pred:
         st.markdown("---")
 
         def plot_pred(df_ticker: pd.DataFrame, name: str) -> go.Figure:
-            fig = go.Figure()
             df_ticker = df_ticker.sort_values("date")
+            df_ticker = filter_recent_days(df_ticker, PRED_WINDOW_DAYS)
+
+            fig = go.Figure()
             hist = df_ticker.dropna(subset=["y_true"])
             if not hist.empty:
                 fig.add_trace(go.Scatter(
                     x=hist["date"], y=hist["y_true"], mode="lines",
                     name="Real (últimos)", line=dict(width=2, color=BLUE)
                 ))
+
             fig.add_trace(go.Scatter(
                 x=df_ticker["date"], y=df_ticker["y_pred"], mode="lines+markers",
                 name="Predicción test", line=dict(width=2, dash="dash", color=LIGHT_BLUE),
                 marker=dict(size=5)
             ))
+
             fc = df_ticker[df_ticker["y_true"].isna()]
             if not fc.empty:
                 fig.add_trace(go.Scatter(
@@ -246,12 +260,28 @@ if st.session_state.show_pred:
                     name="Forecast (t+1…)", line=dict(width=0),
                     marker=dict(size=7, color=RED)
                 ))
+                # ----- Línea vertical y anotación SIN add_vline -----
+                start_fc_date = pd.to_datetime(fc["date"].min())
+                fig.add_shape(
+                    type="line",
+                    xref="x", yref="paper",
+                    x0=start_fc_date, x1=start_fc_date,
+                    y0=0, y1=1,
+                    line=dict(color="#96A6B9", width=1.5, dash="dot")
+                )
+                fig.add_annotation(
+                    x=start_fc_date, y=1, yref="paper",
+                    text="Inicio forecast", showarrow=False,
+                    xanchor="left", yanchor="bottom",
+                    font=dict(color="#96A6B9", size=11), bgcolor="rgba(0,0,0,0)"
+                )
+
             fig.update_layout(
                 height=420, margin=dict(l=10, r=10, t=40, b=10),
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor=PLOT_BG,
                 font=dict(color=TEXT), legend=dict(bgcolor="rgba(0,0,0,0)"),
                 xaxis=dict(gridcolor=GRID), yaxis=dict(gridcolor=GRID),
-                title=f"{name} — Real vs Predicción"
+                title=f"{name} — Real vs Predicción (últimos {PRED_WINDOW_DAYS} días)"
             )
             return fig
 
